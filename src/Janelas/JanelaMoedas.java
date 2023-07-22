@@ -8,11 +8,13 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import org.json.JSONObject;
 
@@ -27,6 +29,7 @@ public class JanelaMoedas extends Janelas{
 
 	@Override
 	public void opcoes(Janelas janela) {
+		boolean BRLemPrimeiro = false;
 		JPanel painel = new JPanel();
 		this.menuBar = new JMenuBar();
 		JLabel labelMensagemParaConverter = new JLabel("Escolha uma moeda para converter seu dinheiro: ");
@@ -66,6 +69,7 @@ public class JanelaMoedas extends Janelas{
 			public void actionPerformed(ActionEvent e) {
 				menu.setText("Converter de Reais a Dólar");
 				apiMoeda("USD-BRL");
+				
 			}
 		});
 
@@ -84,6 +88,7 @@ public class JanelaMoedas extends Janelas{
 			public void actionPerformed(ActionEvent e) {
 				menu.setText("Converter de Reais a Libras Esterlinas");
 				apiMoeda("GBP-BRL");
+
 			}
 		});
 		
@@ -162,21 +167,48 @@ public class JanelaMoedas extends Janelas{
 		listaOpcoes.add(opcao09);
 		listaOpcoes.add(opcao10);
 		
+		super.adicionarNaJanela(painel, janela);
 		
+		JLabel labelValor = new JLabel("Insria um valor: ");
+		painel.add(labelValor);
 		
+		this.inputNumParaConverter = new JTextField(20);
+		painel.add(this.inputNumParaConverter);
+		
+		JButton converter = new JButton("Converter");
+		painel.add(converter);
+		converter.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					double inputValor = getTextField();
+				} catch(Exception exept) {
+					System.out.println("Erro: " + exept);
+				}
+				if(menu.getText().substring(menu.getText().length() - 5).compareTo("Reais") == 0) {
+					
+				} else {
+					
+				}
+					
+			}
+		});
 		//janela.clos
 		// Salvando tudo
-		super.adicionarNaJanela(painel, janela);	
+		
+			
+		
 	}
 	
 	public double apiMoeda(String moeda) {
 		String urlDaMoeda = "https://economia.awesomeapi.com.br/last/" + moeda;
+		double valorMoeda = 0;
 		try {
 			URL url = new URL(urlDaMoeda);
 			HttpURLConnection conexao = (HttpURLConnection) url.openConnection();
 			BufferedReader resposta = new BufferedReader(new InputStreamReader(conexao.getInputStream()));
 			String jsonEmString = JanelaMoedas.converteJSON(resposta);
-			double resultado = 0;	
+			
 			
 			//extrair dados
 	        JSONObject jsonObject = new JSONObject(jsonEmString);
@@ -185,19 +217,19 @@ public class JanelaMoedas extends Janelas{
 	        JSONObject valorObject = jsonObject.getJSONObject(moeda.replace("-", ""));
 	        
 	        // Obter o valor do "bid" para a moeda USDBRL
-	        double bidValue = valorObject.getDouble("bid");
+	        valorMoeda = valorObject.getDouble("bid");
 	        
 	        // Printanod valores pra testar
 	        System.out.println(jsonEmString);
 	        System.out.println(jsonObject);
 	        System.out.println(valorObject);
-	        System.out.println(bidValue);
+	        System.out.println(valorMoeda);
 		} catch(Exception e) {
 			System.out.println("Erro: " + e);
 		}
 //		
+		return valorMoeda;
 		
-		return 0;
 	}
 	
 	public static String converteJSON(BufferedReader buffereReader) throws IOException {
@@ -208,5 +240,19 @@ public class JanelaMoedas extends Janelas{
 		
 		return jsonEmString;
 	}
+	
+	public double getTextField() throws Exception {
+		String texto = inputNumParaConverter.getText();
+		String textoComPonto = texto.replace(",", ".");
+		for(char c : textoComPonto.toCharArray()) {
+			if( (Character.isLetter(c) || !Character.isLetterOrDigit(c)) && !Character.toString(c).equals(".")) {
+				throw new Exception("Letra ou caracter especial encontrado");
+			} 
+		}
+		
+		return Double.parseDouble(textoComPonto);
+	}
 }
+
+
 
