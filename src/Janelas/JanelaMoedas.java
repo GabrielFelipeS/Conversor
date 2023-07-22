@@ -4,13 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.net.http.HttpResponse.BodyHandlers;
-import java.util.List;
-import java.util.Map;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -18,9 +14,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-
+import org.json.JSONObject;
 
 public class JanelaMoedas extends Janelas{
 	
@@ -80,7 +74,7 @@ public class JanelaMoedas extends Janelas{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menu.setText("Converter de Reais a Euro");
-
+				apiMoeda("EUR-BRL");
 			}
 		});
 		
@@ -89,7 +83,7 @@ public class JanelaMoedas extends Janelas{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menu.setText("Converter de Reais a Libras Esterlinas");
-
+				apiMoeda("GBP-BRL");
 			}
 		});
 		
@@ -98,7 +92,7 @@ public class JanelaMoedas extends Janelas{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menu.setText("Converter de Reais a Peso argentino");
-
+				apiMoeda("ARS-BRL");
 			}
 		});
 		
@@ -107,7 +101,7 @@ public class JanelaMoedas extends Janelas{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menu.setText("Converter de Reais a Peso Chileno");
-
+				apiMoeda("CLP-BRL");
 			}
 		});
 		
@@ -116,7 +110,7 @@ public class JanelaMoedas extends Janelas{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menu.setText("Converter de Dólar a Reais");
-
+				apiMoeda("BRL-USD");
 			}
 		});
 		
@@ -125,7 +119,7 @@ public class JanelaMoedas extends Janelas{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menu.setText("Converter de Euro a Reais");
-
+				apiMoeda("BRL-EUR");
 			}
 		});
 		
@@ -134,7 +128,7 @@ public class JanelaMoedas extends Janelas{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menu.setText("Converter de Libras Esterlinas a Reais");
-
+				apiMoeda("BRL-GBP");
 			}
 		});
 		
@@ -143,7 +137,7 @@ public class JanelaMoedas extends Janelas{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menu.setText("Converter de Peso argentino a  Reais");
-
+				apiMoeda("BRL-ARS");
 			}
 		});
 		
@@ -152,7 +146,7 @@ public class JanelaMoedas extends Janelas{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menu.setText("Converter de Peso Chileno a Reais");
-
+				apiMoeda("BRL-CLP");
 			}
 		});
 		
@@ -177,48 +171,30 @@ public class JanelaMoedas extends Janelas{
 	
 	public double apiMoeda(String moeda) {
 		String urlDaMoeda = "https://economia.awesomeapi.com.br/last/" + moeda;
-		//try {
-//			URL url = new URL(urlDaMoeda);
-//			HttpURLConnection conexao = (HttpURLConnection) url.openConnection();
-//			
-//			BufferedReader resposta = new BufferedReader(new InputStreamReader(conexao.getInputStream()));
-//			String jsonEmString = JanelaMoedas.converteJSON(resposta);
+		try {
+			URL url = new URL(urlDaMoeda);
+			HttpURLConnection conexao = (HttpURLConnection) url.openConnection();
+			BufferedReader resposta = new BufferedReader(new InputStreamReader(conexao.getInputStream()));
+			String jsonEmString = JanelaMoedas.converteJSON(resposta);
 			double resultado = 0;	
 			
-			var client = HttpClient.newHttpClient();
-			
-			URI endereco = URI.create(urlDaMoeda);
-			
-			var request = HttpRequest.newBuilder(endereco)
-					.GET()
-					.build();
-			HttpResponse<String> response = null;
-			try {
-				response = client.send(request, BodyHandlers.ofString());
-			} catch (IOException | InterruptedException e1) {
-				e1.printStackTrace();
-			}
-			String body = response.body();
-			
 			//extrair dados
-			JsonParser parser = new JsonParser();
-			JsonElement dados =  parser.parse(body);
-			System.out.println(dados);
-			//exibir
-//			for (Map<String, String> currency : dados) {
-//				resultado = Double.parseDouble(currency.get("bid"));
-//			}
-//				
-//			System.out.println(resultado);
-			//return resultado;
-//			Gson gson = new Gson();
-//			valores valor = gson.fromJson(jsonEmString, valores.class);
-//			System.out.println(jsonEmString);
-//			System.out.println(valor);
-
-//		} catch(Exception e) {
-//			System.out.println("Erro: " + e);
-//		}
+	        JSONObject jsonObject = new JSONObject(jsonEmString);
+	        
+	        // Obter o objeto JSON para a moeda USDBRL
+	        JSONObject valorObject = jsonObject.getJSONObject(moeda.replace("-", ""));
+	        
+	        // Obter o valor do "bid" para a moeda USDBRL
+	        double bidValue = valorObject.getDouble("bid");
+	        
+	        // Printanod valores pra testar
+	        System.out.println(jsonEmString);
+	        System.out.println(jsonObject);
+	        System.out.println(valorObject);
+	        System.out.println(bidValue);
+		} catch(Exception e) {
+			System.out.println("Erro: " + e);
+		}
 //		
 		
 		return 0;
