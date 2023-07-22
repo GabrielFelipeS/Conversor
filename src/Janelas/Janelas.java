@@ -27,4 +27,6 @@ public abstract class  Janelas extends JFrame{
 		add(painel);
 		janela.setVisible(true);
 	}
+	
+
 }

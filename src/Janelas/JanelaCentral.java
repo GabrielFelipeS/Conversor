@@ -38,7 +38,7 @@ public class JanelaCentral extends Janelas{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				janela.setVisible(false);
-				JanelaMoedas janelaMoedas = new JanelaMoedas();
+				JanelaMoedas janelaMoedas = new JanelaMoedas(janela);
 				janelaMoedas.opcoes(janelaMoedas);
 			}
 		});	
@@ -67,8 +67,6 @@ public class JanelaCentral extends Janelas{
 		listaOpcoes.add(opcao3);
 		
 		super.adicionarNaJanela(painel, janela);
-
-		super.setJanelaPrincipal(janela);
 	}
 	
 }
