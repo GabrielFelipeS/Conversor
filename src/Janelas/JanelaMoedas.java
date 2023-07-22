@@ -19,6 +19,7 @@ import javax.swing.JTextField;
 import org.json.JSONObject;
 
 public class JanelaMoedas extends Janelas{
+	private double valorMoeda;
 	
 	public JanelaMoedas(Janelas janela) {
 		super.setJanelaPrincipal(janela);
@@ -68,7 +69,7 @@ public class JanelaMoedas extends Janelas{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menu.setText("Converter de Reais a Dólar");
-				apiMoeda("USD-BRL");
+				valorMoeda = apiMoeda("USD-BRL");
 				
 			}
 		});
@@ -78,7 +79,7 @@ public class JanelaMoedas extends Janelas{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menu.setText("Converter de Reais a Euro");
-				apiMoeda("EUR-BRL");
+				valorMoeda = apiMoeda("EUR-BRL");
 			}
 		});
 		
@@ -87,7 +88,7 @@ public class JanelaMoedas extends Janelas{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menu.setText("Converter de Reais a Libras Esterlinas");
-				apiMoeda("GBP-BRL");
+				valorMoeda = apiMoeda("GBP-BRL");
 
 			}
 		});
@@ -97,7 +98,7 @@ public class JanelaMoedas extends Janelas{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menu.setText("Converter de Reais a Peso argentino");
-				apiMoeda("ARS-BRL");
+				valorMoeda = apiMoeda("ARS-BRL");
 			}
 		});
 		
@@ -106,7 +107,7 @@ public class JanelaMoedas extends Janelas{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menu.setText("Converter de Reais a Peso Chileno");
-				apiMoeda("CLP-BRL");
+				valorMoeda = apiMoeda("CLP-BRL");
 			}
 		});
 		
@@ -115,7 +116,7 @@ public class JanelaMoedas extends Janelas{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menu.setText("Converter de Dólar a Reais");
-				apiMoeda("BRL-USD");
+				valorMoeda = apiMoeda("BRL-USD");
 			}
 		});
 		
@@ -124,7 +125,7 @@ public class JanelaMoedas extends Janelas{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menu.setText("Converter de Euro a Reais");
-				apiMoeda("BRL-EUR");
+				valorMoeda = apiMoeda("BRL-EUR");
 			}
 		});
 		
@@ -133,7 +134,7 @@ public class JanelaMoedas extends Janelas{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menu.setText("Converter de Libras Esterlinas a Reais");
-				apiMoeda("BRL-GBP");
+				valorMoeda = apiMoeda("BRL-GBP");
 			}
 		});
 		
@@ -142,7 +143,7 @@ public class JanelaMoedas extends Janelas{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menu.setText("Converter de Peso argentino a  Reais");
-				apiMoeda("BRL-ARS");
+				valorMoeda = apiMoeda("BRL-ARS");
 			}
 		});
 		
@@ -151,7 +152,7 @@ public class JanelaMoedas extends Janelas{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menu.setText("Converter de Peso Chileno a Reais");
-				apiMoeda("BRL-CLP");
+				valorMoeda = apiMoeda("BRL-CLP");
 			}
 		});
 		
@@ -180,17 +181,19 @@ public class JanelaMoedas extends Janelas{
 		converter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				double inputValor = 0, resultado = 0;
 				try {
-					double inputValor = getTextField();
+					inputValor = getTextField();
 				} catch(Exception exept) {
 					System.out.println("Erro: " + exept);
 				}
 				if(menu.getText().substring(menu.getText().length() - 5).compareTo("Reais") == 0) {
+					resultado = inputValor * valorMoeda;
 					
 				} else {
-					
+					resultado = inputValor / valorMoeda;
 				}
-					
+				System.out.println(resultado);
 			}
 		});
 		//janela.clos
