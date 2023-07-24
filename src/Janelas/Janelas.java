@@ -15,6 +15,7 @@ public abstract class  Janelas extends JFrame{
 	protected ArrayList<JMenuItem> listaOpcoes = new ArrayList<JMenuItem>();
 	protected Janelas janelaPrincipal;
 	protected JTextField inputNumParaConverter;
+	protected Janelas janelaAtual;
 	
 	public abstract void opcoes(Janelas janela);
 	
@@ -28,6 +29,7 @@ public abstract class  Janelas extends JFrame{
 		painel.add(menuBar);
 		add(painel);
 		janela.setVisible(true);
+		janelaAtual = janela;
 	}
 	
 

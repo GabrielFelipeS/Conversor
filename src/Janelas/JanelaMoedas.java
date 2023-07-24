@@ -7,12 +7,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -40,16 +42,16 @@ public class JanelaMoedas extends Janelas{
 		//menu.setText("TEstando");
 		
 		// Iniciando opçoes
-		JMenuItem opcao01 = new JMenuItem("Converter de Reais a Dólar");
-		JMenuItem opcao02 = new JMenuItem("Converter de Reais a Euro");
-		JMenuItem opcao03 = new JMenuItem("Converter de Reais a Libras Esterlinas");
-		JMenuItem opcao04 = new JMenuItem("Converter de Reais a Peso argentino");
-		JMenuItem opcao05 = new JMenuItem("Converter de Reais a Peso Chileno");
-		JMenuItem opcao06 = new JMenuItem("Converter de Dólar a Reais");
-		JMenuItem opcao07 = new JMenuItem("Converter de Euro a Reais");
-		JMenuItem opcao08 = new JMenuItem("Converter de Libras Esterlinas a Reais");
-		JMenuItem opcao09 = new JMenuItem("Converter de Peso argentino a  Reais");
-		JMenuItem opcao10 = new JMenuItem("Converter de Peso Chileno a Reais");
+		JMenuItem opcao01 = new JMenuItem("Converter de Reais para Dólar");
+		JMenuItem opcao02 = new JMenuItem("Converter de Reais para Euro");
+		JMenuItem opcao03 = new JMenuItem("Converter de Reais para Libras Esterlinas");
+		JMenuItem opcao04 = new JMenuItem("Converter de Reais para Peso argentino");
+		JMenuItem opcao05 = new JMenuItem("Converter de Reais para Peso Chileno");
+		JMenuItem opcao06 = new JMenuItem("Converter de Dólar para Reais");
+		JMenuItem opcao07 = new JMenuItem("Converter de Euro para Reais");
+		JMenuItem opcao08 = new JMenuItem("Converter de Libras Esterlinas para Reais");
+		JMenuItem opcao09 = new JMenuItem("Converter de Peso argentino para Reais");
+		JMenuItem opcao10 = new JMenuItem("Converter de Peso Chileno para Reais");
 		//janelaPrincipal.setVisible(true);
 		
 		// Colocando na lista de opções
@@ -68,7 +70,7 @@ public class JanelaMoedas extends Janelas{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				menu.setText("Converter de Reais a Dólar");
+				menu.setText("Converter de Reais para Dólar");
 				valorMoeda = apiMoeda("USD-BRL");
 				
 			}
@@ -78,7 +80,7 @@ public class JanelaMoedas extends Janelas{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				menu.setText("Converter de Reais a Euro");
+				menu.setText("Converter de Reais para Euro");
 				valorMoeda = apiMoeda("EUR-BRL");
 			}
 		});
@@ -87,7 +89,7 @@ public class JanelaMoedas extends Janelas{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				menu.setText("Converter de Reais a Libras Esterlinas");
+				menu.setText("Converter de Reais para Libras Esterlinas");
 				valorMoeda = apiMoeda("GBP-BRL");
 
 			}
@@ -97,7 +99,7 @@ public class JanelaMoedas extends Janelas{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				menu.setText("Converter de Reais a Peso argentino");
+				menu.setText("Converter de Reais para Peso argentino");
 				valorMoeda = apiMoeda("ARS-BRL");
 			}
 		});
@@ -106,7 +108,7 @@ public class JanelaMoedas extends Janelas{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				menu.setText("Converter de Reais a Peso Chileno");
+				menu.setText("Converter de Reais para Peso Chileno");
 				valorMoeda = apiMoeda("CLP-BRL");
 			}
 		});
@@ -115,7 +117,7 @@ public class JanelaMoedas extends Janelas{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				menu.setText("Converter de Dólar a Reais");
+				menu.setText("Converter de Dólar para Reais");
 				valorMoeda = apiMoeda("BRL-USD");
 			}
 		});
@@ -124,7 +126,7 @@ public class JanelaMoedas extends Janelas{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				menu.setText("Converter de Euro a Reais");
+				menu.setText("Converter de Euro para Reais");
 				valorMoeda = apiMoeda("BRL-EUR");
 			}
 		});
@@ -133,7 +135,7 @@ public class JanelaMoedas extends Janelas{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				menu.setText("Converter de Libras Esterlinas a Reais");
+				menu.setText("Converter de Libras Esterlinas para Reais");
 				valorMoeda = apiMoeda("BRL-GBP");
 			}
 		});
@@ -142,7 +144,7 @@ public class JanelaMoedas extends Janelas{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				menu.setText("Converter de Peso argentino a  Reais");
+				menu.setText("Converter de Peso argentino para  Reais");
 				valorMoeda = apiMoeda("BRL-ARS");
 			}
 		});
@@ -151,7 +153,7 @@ public class JanelaMoedas extends Janelas{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				menu.setText("Converter de Peso Chileno a Reais");
+				menu.setText("Converter de Peso Chileno para Reais");
 				valorMoeda = apiMoeda("BRL-CLP");
 			}
 		});
@@ -179,28 +181,43 @@ public class JanelaMoedas extends Janelas{
 		JButton converter = new JButton("Converter");
 		painel.add(converter);
 		converter.addActionListener(new ActionListener() {
+			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				double inputValor = 0, resultado = 0;
+				
+				if(valorMoeda <= 0) {
+					JOptionPane.showInternalMessageDialog(null, "Por favor insira uma moeda para conversão",
+				             "AVISO", JOptionPane.INFORMATION_MESSAGE);
+					throw new RuntimeException("Por favor insira uma moeda para conversão");
+				}
+				
+				
 				try {
 					inputValor = getTextField();
+					DecimalFormat decimalFormat = new DecimalFormat("#.##");
+					resultado = Double.parseDouble(decimalFormat.format(inputValor / valorMoeda).replace(",", "."));
+					
+					JOptionPane.showInternalMessageDialog(null, "O valor da conversão é " + resultado, "Message", JOptionPane.INFORMATION_MESSAGE);
+					int a = JOptionPane.showConfirmDialog(janelaPrincipal, "Deseja Continuar?");
+					
+					if(a == JOptionPane.YES_OPTION) {
+						System.out.println("SIM");
+						janelaAtual.dispose();
+						janelaPrincipal.setVisible(true);
+					} else if(a == JOptionPane.NO_OPTION) {
+						JOptionPane.showInternalMessageDialog(null, "Programa finalizado");
+						System.exit(0);
+					} else {
+						JOptionPane.showInternalMessageDialog(null, "Programa concluído");
+					}
+					
+					System.out.println(resultado);
 				} catch(Exception exept) {
 					System.out.println("Erro: " + exept);
 				}
-				if(menu.getText().substring(menu.getText().length() - 5).compareTo("Reais") == 0) {
-					resultado = inputValor * valorMoeda;
-					
-				} else {
-					resultado = inputValor / valorMoeda;
-				}
-				System.out.println(resultado);
 			}
 		});
-		//janela.clos
-		// Salvando tudo
-		
-			
-		
 	}
 	
 	public double apiMoeda(String moeda) {
@@ -214,23 +231,27 @@ public class JanelaMoedas extends Janelas{
 			
 			
 			//extrair dados
-	        JSONObject jsonObject = new JSONObject(jsonEmString);
-	        
-	        // Obter o objeto JSON para a moeda USDBRL
-	        JSONObject valorObject = jsonObject.getJSONObject(moeda.replace("-", ""));
-	        
-	        // Obter o valor do "bid" para a moeda USDBRL
-	        valorMoeda = valorObject.getDouble("bid");
-	        
-	        // Printanod valores pra testar
-	        System.out.println(jsonEmString);
-	        System.out.println(jsonObject);
-	        System.out.println(valorObject);
-	        System.out.println(valorMoeda);
+			JSONObject jsonObject = new JSONObject(jsonEmString);
+			
+			// Obter o objeto JSON para a moeda USDBRL
+			JSONObject valorObject = jsonObject.getJSONObject(moeda.replace("-", ""));
+			
+			// Obter o valor do "bid" para a moeda USDBRL
+			double valorSemTratamento = valorObject.getDouble("bid");
+			
+			// Fazendo um pequeno tratamento de dados
+			DecimalFormat decimalFormat = new DecimalFormat("#.##");
+			valorMoeda = Double.parseDouble(decimalFormat.format(valorSemTratamento).replace(",", "."));
+			
+			// Printanod valores pra testar
+			System.out.println(jsonEmString);
+			System.out.println(jsonObject);
+			System.out.println(valorObject);
+			System.out.println(valorMoeda);
+			
 		} catch(Exception e) {
 			System.out.println("Erro: " + e);
-		}
-//		
+		}	
 		return valorMoeda;
 		
 	}
@@ -247,8 +268,18 @@ public class JanelaMoedas extends Janelas{
 	public double getTextField() throws Exception {
 		String texto = inputNumParaConverter.getText();
 		String textoComPonto = texto.replace(",", ".");
+		
+		if(texto.isEmpty()) {
+			JOptionPane.showInternalMessageDialog(null, "Valor inválido.\nPor favor insira um número para converter",
+		             "AVISO", JOptionPane.INFORMATION_MESSAGE);
+			throw new Exception("Input vazios");
+		}
+		
 		for(char c : textoComPonto.toCharArray()) {
+			// Impede a entrade de qualquer valor que não seja número e ponto final
 			if( (Character.isLetter(c) || !Character.isLetterOrDigit(c)) && !Character.toString(c).equals(".")) {
+				JOptionPane.showInternalMessageDialog(null, "Valor inválido.\nLetra ou carácter especial encontrado",
+			             "AVISO", JOptionPane.INFORMATION_MESSAGE);
 				throw new Exception("Letra ou caracter especial encontrado");
 			} 
 		}
