@@ -78,9 +78,9 @@ A classe `Principal` contém um método chamado `checar(String input)` que valid
 
 O programa é executado em um loop infinito até que o usuário escolha sair explicitamente. Em cada iteração, o usuário é apresentado com o menu principal e guiado através das conversões desejadas.
 
-## Repositório 📂
+## Repositórios 📂
 
-[Repositório GitHub](https://github.com/GabrielFelipeS/Conversor)
+[Repositórios GitHub](https://github.com/GabrielFelipeS/)
 
 ## Tecnologias Utilizadas 🖥️
 
